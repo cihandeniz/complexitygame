@@ -58,26 +58,26 @@ public interface Monitor {
     class Matter implements Monitor {
         @Override
         public void render(Graphics gx, Space space, int x, int y) {
-            space.forEach(information -> {
-                var energy = information.energy();
+            space.forEach(matter -> {
+                var mass = matter.mass();
     
                 double divider = 100;
                 int r = 50, g = 50, b = 255;
-                if(energy <= 100) {
+                if(mass <= 100) {
                     r = g = b = 255;
 
                     divider = 0.25;
-                } else if(energy >= 10000) {
+                } else if(mass >= 50000) {
                     r = b = 255;
                     g = 0;
 
-                    divider = 2000;
+                    divider = 1000;
                 }
     
                 final var max = RADIUS * 2.0;
                 final var min = RADIUS / 4.0;
     
-                int radius = (int) Math.max(min, Math.min(max, energy / divider));
+                int radius = (int) Math.max(min, Math.min(max, mass / divider));
                 int alpha = Math.min(255, (int) ((radius / (max - min)) * 255));
     
                 gx.setColor(new Color(r, g, b, alpha));

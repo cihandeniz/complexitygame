@@ -3,7 +3,7 @@ package com.ikinoktabir.cg;
 public class Atom extends Matter {
 
     public Atom() {
-        super(10000, 10, 100000);
+        super(10000, 5000, 15000);
     }
 
     @Override
@@ -13,12 +13,7 @@ public class Atom extends Matter {
             double energy;
         };
 
-        if (space().energy() > energy() * 4) {
-            direction(Direction.random());
-            return;
-        }
-
-        result.energy = energy() / 2;
+        result.energy = 0;
 
         Direction.forEach(direction -> {
             var energy = space().adjacent(direction).energy() - space().adjacent(direction.opposite()).energy();
@@ -29,31 +24,27 @@ public class Atom extends Matter {
         });
 
         if (result.direction != null) {
-            if (result.energy > energy() * 2) {
-                direction(result.direction.right().right());
-            } else if (result.energy > energy() * 1.5) {
+            if (result.energy > mass() * 4) {
+                direction(result.direction);
+            } else if (result.energy > mass() * 2) {
                 direction(towards(result.direction));
             } else {
-                direction(awayFrom(result.direction));
+                direction(result.direction.right().right());
             }
-        } else {
-            direction(momentum());
         }
     }
 
     @Override
-    public double energyRate() {
-        return direction() != null ? -0.0001 : 0.0001;
+    public double decayRate() {
+        return direction() == null ? 0.001 : -0.001;
     }
 
     @Override
     public void create() {
-        space().add(new Atom());
-        space().add(new Atom());
+        space().add(new Molecule());
     }
 
     @Override
     public void destroy() {
     }
-
 }

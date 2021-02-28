@@ -8,12 +8,12 @@ public class Space {
     private Energy energy;
     private Space[] adjacents;
     private Space anti;
-    private List<Matter> informations;
+    private List<Matter> matters;
 
     public Space() {
         energy = new Energy();
         adjacents = new Space[Direction.COUNT];
-        informations = new ArrayList<Matter>();
+        matters = new ArrayList<Matter>();
     }
 
     public void adjacent(Direction direction, Space adjacent) {
@@ -32,27 +32,27 @@ public class Space {
         this.anti = anti;
     }
 
-    public void add(Matter information) {
-        if (information.space() != null) {
-            information.space().informations.remove(information);
+    public void add(Matter matter) {
+        if (matter.space() != null) {
+            matter.space().matters.remove(matter);
         }
 
-        informations.add(information);
-        information.space(this);
+        matters.add(matter);
+        matter.space(this);
     }
 
-    public void remove(Matter information) {
-        informations.remove(information);
+    public void remove(Matter matter) {
+        matters.remove(matter);
     }
 
-    public void create(Matter information) {
-        informations.clear();
+    public void create(Matter matter) {
+        matters.clear();
 
-        add(information);
+        add(matter);
     }
 
     public void pulse() {
-        forEach(information -> anti.energy.transfer(information.energy(), energy));
+        forEach(matter -> anti.energy.transfer(matter.mass(), energy));
     }
 
     public void react() {
@@ -80,12 +80,12 @@ public class Space {
         return energy.amount();
     }
 
-    public double infoEnergy() {
-        return informations.stream().map(i -> i.energy()).reduce(0.0, Double::sum);
+    public double mass() {
+        return matters.stream().map(i -> i.mass()).reduce(0.0, Double::sum);
     }
 
     public void forEach(Consumer<Matter> consumer) {
-        for (var information : informations.toArray(new Matter[0])) {
+        for (var information : matters.toArray(new Matter[0])) {
             consumer.accept(information);
         }
     }

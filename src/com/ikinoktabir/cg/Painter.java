@@ -29,8 +29,8 @@ public class Painter extends JPanel {
             private static final long serialVersionUID = 1L;
 
             {
-                add(new Monitor.Energy());
-                add(new Monitor.AntiEnergy());
+                //add(new Monitor.Energy());
+                //add(new Monitor.AntiEnergy());
                 add(new Monitor.Matter());
             }
         };

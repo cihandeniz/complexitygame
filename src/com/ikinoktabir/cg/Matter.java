@@ -1,15 +1,15 @@
 package com.ikinoktabir.cg;
 
 public abstract class Matter {
-    private double energy;
+    private double mass;
     private Space space;
     private Direction direction;
     private Direction momentum;
     private double min;
     private double max;
 
-    public Matter(double energy, double min, double max) {
-        this.energy = energy;
+    public Matter(double mass, double min, double max) {
+        this.mass = mass;
         this.min = min;
         this.max = max;
     }
@@ -22,8 +22,8 @@ public abstract class Matter {
         this.space = space;
     }
 
-    public double energy() {
-        return energy;
+    public double mass() {
+        return mass;
     }
 
     public void direction(Direction direction) {
@@ -57,7 +57,7 @@ public abstract class Matter {
     }
 
     public void move() {
-        energy -= energy * energyRate();
+        mass -= mass * decayRate();
 
         if (space == null || direction == null) {
             return;
@@ -66,20 +66,18 @@ public abstract class Matter {
         space.adjacent(direction).add(this);
         direction(null);
 
-        if (energy > max) {
+        if (mass > max) {
+            space().remove(this);
             create();
-
+        } else if (mass < min) {
             space().remove(this);
-        } else if (energy < min) {
             destroy();
-
-            space().remove(this);
         }
     }
 
     public abstract void react();
 
-    public abstract double energyRate();
+    public abstract double decayRate();
 
     public abstract void create();
 
